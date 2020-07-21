@@ -2,7 +2,7 @@
 
 size_t height_recursion(const binary_tree_t *tree, size_t count);
 int level_check_recursion(const binary_tree_t *tree,
-						  int level, int count, int flag);
+						  int height, int level, int count, int flag);
 
 /**
  * binary_tree_is_complete - checks if a binary tree is complete
@@ -20,9 +20,9 @@ int binary_tree_is_complete(const binary_tree_t *tree)
 
 	height = height_recursion(tree, 0);
 
-	for (i = 0; i < height; i++)
+	for (i = 1; i < height; i++)
 	{
-		check = level_check_recursion(tree, height - i, 0, 1);
+		check = level_check_recursion(tree, height, height - i, 0, 1);
 		if (check == 0)
 			return (0);
 	}
@@ -33,29 +33,32 @@ int binary_tree_is_complete(const binary_tree_t *tree)
 /**
  * level_check_recursion - aux function for recursion
  * @tree: pointer to the root node of the tree to traverse
- * @level: desire level to print
+ * @height: height
+ * @level: desire level to check
  * @count: counter for current level
  * @flag: 0 if not complete.
  * Return: flag
  */
 int level_check_recursion(const binary_tree_t *tree,
-						  int level, int count, int flag)
+						  int height, int level, int count, int flag)
 {
 
 	if (tree->left != NULL)
-		flag = level_check_recursion(tree->left, level, count + 1, flag);
+		flag = level_check_recursion(tree->left, height, level, count + 1, flag);
 
 	if (tree->right != NULL)
-		flag = level_check_recursion(tree->right, level, count + 1, flag);
+		flag = level_check_recursion(tree->right, height, level, count + 1, flag);
 
 	if (count == level && flag == 1 && tree->left == NULL)
 		flag = 2;
-	else if (count == level && flag == 2 && tree->left != NULL)
+	else if ((count == level && flag == 2 && tree->left != NULL) ||
+			 (count == level && height - 1 != level && tree->left == NULL))
 		flag = 0;
 
 	if (count == level && flag == 1 && tree->right == NULL)
 		flag = 2;
-	else if (count == level && flag == 2 && tree->right != NULL)
+	else if ((count == level && flag == 2 && tree->right != NULL) ||
+			 (count == level && height - 1 != level && tree->right == NULL))
 		flag = 0;
 
 	return (flag);
