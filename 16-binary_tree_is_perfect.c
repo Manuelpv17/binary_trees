@@ -1,3 +1,4 @@
+#include <math.h>
 #include "binary_trees.h"
 
 size_t height_recursion(const binary_tree_t *tree, size_t count);
@@ -15,7 +16,8 @@ int binary_tree_is_perfect(const binary_tree_t *tree)
 {
 	size_t height = 0;
 	size_t leaves = 0;
-	size_t expected_leaves = 0;
+	size_t expected_leaves = 1;
+	size_t count;
 
 	if (tree == NULL)
 		return (0);
@@ -23,10 +25,8 @@ int binary_tree_is_perfect(const binary_tree_t *tree)
 	height = height_recursion(tree, 0);
 	leaves = leaves_recursion(tree, 0);
 
-	if (height == 0)
-		expected_leaves = 1;
-	else
-		expected_leaves = height * height;
+	for (count = 0; count < height; count++)
+		expected_leaves = expected_leaves * 2;
 
 	if (expected_leaves == leaves)
 		return (1);
