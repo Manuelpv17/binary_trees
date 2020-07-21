@@ -23,7 +23,11 @@ int binary_tree_is_perfect(const binary_tree_t *tree)
 	height = height_recursion(tree, 0);
 	leaves = leaves_recursion(tree, 0);
 
-	expected_leaves = height * height;
+	if (height == 0)
+		expected_leaves = 1;
+	else
+		expected_leaves = height * height;
+
 	if (expected_leaves == leaves)
 		return (1);
 
