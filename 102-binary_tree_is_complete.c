@@ -1,7 +1,8 @@
 #include "binary_trees.h"
 
 size_t height_recursion(const binary_tree_t *tree, size_t count);
-int level_check_recursion(const binary_tree_t *tree, int level, int count, int flag);
+int level_check_recursion(const binary_tree_t *tree,
+						  int level, int count, int flag);
 
 /**
  * binary_tree_is_complete - checks if a binary tree is complete
@@ -30,13 +31,15 @@ int binary_tree_is_complete(const binary_tree_t *tree)
 }
 
 /**
- * levelorder_recursion - aux function for recursion
+ * level_check_recursion - aux function for recursion
  * @tree: pointer to the root node of the tree to traverse
  * @level: desire level to print
  * @count: counter for current level
- * @leaves: Number of leaves in level
+ * @flag: 0 if not complete.
+ * Return: flag
  */
-int level_check_recursion(const binary_tree_t *tree, int level, int count, int flag)
+int level_check_recursion(const binary_tree_t *tree,
+						  int level, int count, int flag)
 {
 
 	if (tree->left != NULL)
