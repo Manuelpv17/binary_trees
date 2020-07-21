@@ -10,6 +10,9 @@ void binary_tree_delete(binary_tree_t *tree)
 	binary_tree_t *aux = tree;
 	int flag = 1;
 
+	if (tree == NULL)
+		return;
+
 	while (flag)
 	{
 		aux = tree;
