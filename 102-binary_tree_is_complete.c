@@ -17,8 +17,9 @@ int binary_tree_is_complete(const binary_tree_t *tree)
 	height = height_recursion(tree, 0);
 
 	if (height > 1)
-		full = level_check_recursion(tree, height - 1, 0, 1);
-	semi = level_check_recursion(tree, height, 0, 1);
+		full = level_check_recursion(tree, height - 2, 0, 1);
+	if (height > 0)
+		semi = level_check_recursion(tree, height - 1, 0, 1);
 
 	if (full != 0 && semi != 0)
 		return (1);
@@ -41,14 +42,14 @@ int level_check_recursion(const binary_tree_t *tree, int level, int count, int f
 	if (tree->right != NULL)
 		flag = level_check_recursion(tree->right, level, count + 1, flag);
 
-	if (count == level - 1 && flag == 1 && tree->left == NULL)
+	if (count == level && flag == 1 && tree->left == NULL)
 		flag = 2;
-	else if (count == level - 1 && flag == 2 && tree->left != NULL)
+	else if (count == level && flag == 2 && tree->left != NULL)
 		flag = 0;
 
-	if (count == level - 1 && flag == 1 && tree->right == NULL)
+	if (count == level && flag == 1 && tree->right == NULL)
 		flag = 2;
-	else if (count == level - 1 && flag == 2 && tree->right != NULL)
+	else if (count == level && flag == 2 && tree->right != NULL)
 		flag = 0;
 
 	return (flag);
