@@ -12,22 +12,22 @@ int level_check_recursion(const binary_tree_t *tree,
  */
 int binary_tree_is_complete(const binary_tree_t *tree)
 {
-	size_t height;
-	int full = 1, semi = 1;
+	size_t height, i;
+	int check = 1;
 
 	if (tree == NULL)
 		return (0);
 
 	height = height_recursion(tree, 0);
 
-	if (height > 1)
-		full = level_check_recursion(tree, height - 2, 0, 1);
-	if (height > 0)
-		semi = level_check_recursion(tree, height - 1, 0, 1);
+	for (i = 1; i < height; i++)
+	{
+		check = level_check_recursion(tree, height - i, 0, 1);
+		if (check == 0)
+			return (0);
+	}
 
-	if (full != 0 && semi != 0)
-		return (1);
-	return (0);
+	return (1);
 }
 
 /**
