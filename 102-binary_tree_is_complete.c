@@ -20,7 +20,7 @@ int binary_tree_is_complete(const binary_tree_t *tree)
 
 	height = height_recursion(tree, 0);
 
-	for (i = 1; i < height; i++)
+	for (i = 0; i < height; i++)
 	{
 		check = level_check_recursion(tree, height - i, 0, 1);
 		if (check == 0)
