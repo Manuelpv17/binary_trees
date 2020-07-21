@@ -14,6 +14,9 @@ int binary_tree_is_complete(const binary_tree_t *tree)
 	size_t height;
 	int full = 1, semi = 1;
 
+	if (tree == NULL)
+		return (0);
+
 	height = height_recursion(tree, 0);
 
 	if (height > 1)
