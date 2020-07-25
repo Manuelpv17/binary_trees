@@ -66,7 +66,10 @@ avl_t *avl_remove(avl_t *root, int value)
 		avl_remove(root, val);
 		remove_me->n = val;
 	}
-	aux = parent;
+	if (parent != NULL)
+		aux = parent;
+	else
+		aux = root;
 	while (aux != NULL)
 	{
 		prev_balance = balance;
