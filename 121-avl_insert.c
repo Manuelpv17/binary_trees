@@ -35,11 +35,15 @@ avl_t *avl_insert(avl_t **tree, int value)
 				binary_tree_rotate_right(aux->right);
 			aux = binary_tree_rotate_left(aux);
 		}
+		if (aux->parent == NULL)
+			*tree = aux;
+
 		aux = aux->parent;
 	}
 
 	return (new);
 }
+
 /**
  * bst_insert - Inserts a value in a Binary Search Tree
  * @tree: double pointer to the root node of the BST to insert the value
