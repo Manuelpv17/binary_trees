@@ -10,18 +10,20 @@ bst_t *bst_search(const bst_t *tree, int value);
  * If the node to be deleted has two children,
  * it must be replaced with its first in-order successor (not predecessor)
  * After deletion of the desired node, the tree must be rebalanced if necessary
- * Return: pointer to the new root node of the tree after removing the desired value,
- * and after rebalancing
+ * Return: pointer to the new root node of the tree after removing
+ *  the desired value, and after rebalancing
  */
 avl_t *avl_remove(avl_t *root, int value)
 {
-	bst_t *remove_me = NULL;
-	bst_t *aux = NULL;
-	int val;
+	avl_t *remove_me = NULL;
+	avl_t *parent = NULL;
+	avl_t *aux = NULL;
+	int balance = 0, prev_balance = 0, val;
 
 	remove_me = bst_search(root, value);
 	if (remove_me == NULL)
 		return (root);
+	parent = remove_me->parent;
 
 	if (remove_me->left == NULL && remove_me->right == NULL)
 	{
@@ -64,6 +66,29 @@ avl_t *avl_remove(avl_t *root, int value)
 		avl_remove(root, val);
 		remove_me->n = val;
 	}
+	aux = parent;
+	while (aux != NULL)
+	{
+		prev_balance = balance;
+		balance = binary_tree_balance(aux);
+		if (balance > 1)
+		{
+			if (prev_balance < 0)
+				binary_tree_rotate_left(aux->left);
+			aux = binary_tree_rotate_right(aux);
+		}
+		else if (balance < -1)
+		{
+			if (prev_balance > 0)
+				binary_tree_rotate_right(aux->right);
+			aux = binary_tree_rotate_left(aux);
+		}
+		if (aux->parent == NULL)
+			root = aux;
+
+		aux = aux->parent;
+	}
+
 	return (root);
 }
 
