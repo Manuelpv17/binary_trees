@@ -25,10 +25,8 @@ heap_t *heap_insert(heap_t **root, int value)
 	while (aux->left && aux->right)
 	{
 		balance = binary_tree_balance(aux);
-		if (binary_tree_is_full(aux->left) && binary_tree_balance(aux->left) > 0)
-			aux = aux->left;
-		else if ((balance > 0 && binary_tree_is_full(aux->left) == 1) ||
-				 (balance == 0 && binary_tree_is_full(aux->right) == 0))
+		if ((balance > 0 && binary_tree_is_perfect(aux->left) == 1) ||
+			(binary_tree_is_perfect(aux->right) == 0))
 			aux = aux->right;
 		else
 			aux = aux->left;
@@ -103,33 +101,81 @@ int balance_recursion(const binary_tree_t *tree, int count)
 		return (count_l);
 }
 
+size_t height_recursion(const binary_tree_t *tree, size_t count);
+size_t leaves_recursion(const binary_tree_t *tree, size_t count);
+
 /**
- * binary_tree_is_full - full binary tree in which all nodes
- * have either zero or two child nodes.
+ * binary_tree_is_perfect - checks if a binary tree is perfect
+ * A perfect binary tree is one that all internal nodes have two children
+ * and all leaves are at same level
  * @tree: pointer to the root node of the tree to check
- * Return: 1 if full, 0 otherwise
+ * Return: 1 if perfect, 0 otherwise
  * If tree is NULL, your function must return 0
  */
-int binary_tree_is_full(const binary_tree_t *tree)
+int binary_tree_is_perfect(const binary_tree_t *tree)
 {
-	int right = 1;
-	int left = 1;
+	size_t height = 0;
+	size_t leaves = 0;
+	size_t expected_leaves = 1;
+	size_t count;
 
 	if (tree == NULL)
 		return (0);
 
-	if ((tree->left == NULL && tree->right != NULL) ||
-		(tree->left != NULL && tree->right == NULL))
-		return (0);
+	height = height_recursion(tree, 0);
+	leaves = leaves_recursion(tree, 0);
 
+	for (count = 0; count < height; count++)
+		expected_leaves = expected_leaves * 2;
+
+	if (expected_leaves == leaves)
+		return (1);
+
+	return (0);
+}
+
+/**
+ * leaves_recursion - aux function for recursion
+ * @tree: pointer to the root node of the tree to count the number of leaves
+ * @count: Counter of leaves
+ * Return: Number of leaves
+ */
+size_t leaves_recursion(const binary_tree_t *tree, size_t count)
+{
 	if (tree->left != NULL)
-		left = binary_tree_is_full(tree->left);
+		count = leaves_recursion(tree->left, count);
 
 	if (tree->right != NULL)
-		right = binary_tree_is_full(tree->right);
+		count = leaves_recursion(tree->right, count);
 
-	if (right == 0 || left == 0)
-		return (0);
+	if (tree->right == NULL && tree->left == NULL)
+		return (count + 1);
 
-	return (1);
+	return (count);
+}
+
+/**
+ * height_recursion - aux function for recursion
+ * @tree: pointer to tree
+ * @count: counter of height
+ * Return: height
+ */
+size_t height_recursion(const binary_tree_t *tree, size_t count)
+{
+	size_t count_r = 0;
+	size_t count_l = 0;
+
+	if (tree->left != NULL)
+		count_l = height_recursion(tree->left, count + 1);
+
+	if (tree->right != NULL)
+		count_r = height_recursion(tree->right, count + 1);
+
+	if (tree->left == NULL && tree->right == NULL)
+		return (count);
+
+	if (count_r > count_l)
+		return (count_r);
+	else
+		return (count_l);
 }
