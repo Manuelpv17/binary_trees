@@ -25,9 +25,10 @@ heap_t *heap_insert(heap_t **root, int value)
 	while (aux->left && aux->right)
 	{
 		balance = binary_tree_balance(aux);
-		if (balance > 0 && binary_tree_is_full(aux->left) == 1)
-			aux = aux->right;
-		else if (balance == 0 && binary_tree_is_full(aux->right) == 0)
+		if (binary_tree_is_full(aux->left) && binary_tree_balance(aux->left) > 0)
+			aux = aux->left;
+		else if ((balance > 0 && binary_tree_is_full(aux->left) == 1) ||
+				 (balance == 0 && binary_tree_is_full(aux->right) == 0))
 			aux = aux->right;
 		else
 			aux = aux->left;
